@@ -32,9 +32,16 @@ const eventSchema = new Schema({
         type: Date,
         required: true
     },
-    isDone: Boolean,
-    required: false,
-    default: false
+    isDone: {
+       type: Boolean,
+       required: false,
+       default: false
+    },
+    bookings: [{
+        type: Schema.Types.ObjectId,
+        ref: 'bookings'
+    }]
+   
 }, { timestamps: true })
 
 const Events = mongoose.model('events', eventSchema)
