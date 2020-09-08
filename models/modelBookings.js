@@ -5,17 +5,19 @@ const Schema = mongoose.Schema
 const bookingSchema = new Schema({
   id_events: {
     type: Schema.Types.ObjectId,
-    ref:'events',
+    ref: 'events',
     required: true
   },
   id_users: {
     type: Schema.Types.ObjectId,
-    ref:'users',
+    ref: 'users',
     required: true
   },
-  status: Boolean,
-  default: true,
-  required: false
+  status: {
+    type: Boolean,
+    required: false,
+    default: true,
+  }
 }, { timestamps: true })
 
 const Bookings = mongoose.model('bookings', bookingSchema)

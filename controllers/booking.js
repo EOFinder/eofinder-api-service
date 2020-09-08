@@ -1,11 +1,13 @@
 const Bookings = require('../models/modelBookings');
+const Users = require('../models/users');
+const Events = require('../models/events');
 
 module.exports = {
   getAllBookings : async (req, res) => {
     try {
-      const bookings = await Bookings.find({})
-      .populate({path: 'id_user', select: 'user_name'})
-      .populate({path: 'id_event', select: 'event_name'})
+      const bookings = await Bookings.find()
+      .populate({path: 'id_users', select: 'fullname'})
+      .populate({path: 'id_events', select: 'title seats'})
       if(bookings){
         res.status(200).json({
           message: 'Success to get All bookings',
@@ -18,6 +20,7 @@ module.exports = {
       }
     }
     catch(error){
+      console.log(error);
       res.status(500).json({
         message: 'Internal Server error'
       })
@@ -29,16 +32,25 @@ module.exports = {
         ...req.body
       })
 
-      if(newBooking){
-        res.send({
-          message: 'success',
-          newBooking,
-        })
-      } else {
-        res.send({
-          message:'error'
-        })
-      }
+        const userBooks = await Users.findOneAndUpdate(
+          {_id: req.body.id_users}, 
+          {$push: {bookings: newBooking._id}},
+          {new: true}
+        )
+        const eventBooking = await Events.findOneAndUpdate(
+          {_id: req.body.id_events}, 
+          {$push: {bookings: newBooking._id}},
+          {new: true}
+        )
+        const checkSeats = await Events.findOne({_id: req.body.id_events})
+        let seatsUpdate = await checkSeats.seats;
+        const updateSeats = await Events.findOneAndUpdate({_id: req.body.id_events}, {seats: seatsUpdate - 1})
+
+      res.status(200).send({
+        message: 'success',
+        userBooks,
+        eventBooking
+      })
     }
     catch(error) {
       console.log(error)
@@ -49,12 +61,12 @@ module.exports = {
   },
   getOneBooking: async (req, res) => {
     try{
-      const getOneBooking = await Bookings.findOne({})
-      .populate({path: 'id_user', select: 'user_name'})
-      .populate({path: 'id_event', select: 'event_name'})
+      const getOneBooking = await Bookings.findOne({_id: req.params.id})
+      .populate({path: 'id_users', select: 'fullname'})
+      .populate({path: 'id_events', select: 'title seats'})
       
       if(getOneBooking) {
-        res.send(200).json({
+        res.status(200).json({
           message: 'get one booking',
           getOneBooking
         })
