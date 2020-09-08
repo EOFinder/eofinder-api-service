@@ -14,7 +14,7 @@ const bookingSchema = new Schema({
     required: true
   },
   status: Boolean,
-  deafault: true,
+  default: true,
   required: false
 }, { timestamps: true })
 
