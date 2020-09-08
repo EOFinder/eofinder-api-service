@@ -1,8 +1,10 @@
 const Events = require('../models/events')
+const Users = require('../models/users');
 
 module.exports = {
     getAllEvent: async (req, res) => {
         const events = await Events.find()
+        .populate({path: 'posted_by', select: 'fullname'})
 
         if (events.length > 0) {
             res.status(200).json({ message: 'Get all event data', events })
@@ -13,6 +15,8 @@ module.exports = {
     getOneEvent: async (req, res) => {
         try {
             const event = await Events.findById(req.params.id)
+            .populate({path: 'posted_by', select: 'fullname'})
+
                 res.status(200).json({ message: `Event with ID ${event._id} found`, event })
         } catch (err) {
             res.status(500).json({ message: 'Event not found' })
@@ -20,9 +24,17 @@ module.exports = {
       },
     createEvent: async (req, res) => {
         try {
-            const event = new Events(req.body);
-            await event.save();
-            res.status(200).json({ message: 'Event has been created successfully', event })
+            const newEvent = await Events.create({
+                ...req.body
+            })
+
+            const userEventUpdate = await Users.findOneAndUpdate(
+                {_id: req.body.posted_by},
+                {$push: {events: newEvent._id}},
+                {new: true}
+            )
+            console.log(userEventUpdate);
+            res.status(200).json({ message: 'Event has been created successfully', userEventUpdate })
         } catch (err) {
             res.status(500).send(err)
         }
