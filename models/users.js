@@ -16,7 +16,7 @@ const usersSchema = new Schema({
         required: true
     },
     fullname: {
-        type: Number,
+        type: String,
         required: false
     },
     password: {
@@ -40,11 +40,11 @@ const usersSchema = new Schema({
         required: false,
         default: "user"
     },
-    bookings: {
+    bookings: [{
         type: Schema.Types.ObjectId,
         ref: 'bookings',
         required: true
-    },
+    }],
 }, { timestamps: true })
 
 const Users = mongoose.model('users', usersSchema)
