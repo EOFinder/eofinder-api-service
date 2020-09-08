@@ -45,6 +45,10 @@ const usersSchema = new Schema({
         ref: 'bookings',
         required: true
     }],
+    events: [{
+        type: Schema.Types.ObjectId,
+        ref: 'events',
+    }]
 }, { timestamps: true })
 
 const Users = mongoose.model('users', usersSchema)
