@@ -3,6 +3,7 @@ const Events = require('../models/events')
 module.exports = {
     getAllEvent: async (req, res) => {
         const events = await Events.find()
+
         if (events.length > 0) {
             res.status(200).json({ message: 'Get all event data', events })
         } else {
