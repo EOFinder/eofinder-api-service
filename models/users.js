@@ -4,8 +4,7 @@ const Schema = mongoose.Schema
 
 const usersSchema = new Schema({
     providerId: {
-        type: String,
-        required: false
+        type: String
     },
     provider: {
         type: String,
