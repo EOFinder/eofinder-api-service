@@ -4,13 +4,13 @@ const Users = require('../models/users');
 module.exports = {
     register: async (req, res) => {
         try {
-            const {email, password} = req.body
+            const {email, password, fullname, phoneNumber} = req.body
             const checkEmail = await Users.findOne({email: email})
             if(checkEmail) {
                 res.status(400).send({
                     message: 'Email Sudah terdaftar gunakan Akun yang lain',
                     status: 400,
-                    checkEmail
+                   
                 })
             } else {
                 bcrypt.hash(password, 8, (error, hashedPassword) => {
@@ -20,12 +20,15 @@ module.exports = {
                         })
                     } else {
                         Users.create({
-                            email : email, 
-                            password : hashedPassword, 
+                            email,
+                            password: hashedPassword,
+                            fullname,
+                            phoneNumber
                         })
                         res.status(201).send({
                             message: "Register berhasil",
-                            status: 200
+                            status: 200,
+                            checkEmail
                         })
                     }
                 })
@@ -53,11 +56,11 @@ module.exports = {
                     const tokenData = {
                         id: loginUser._id,
                         email: loginUser.email,
-                        username: loginUser.username
                     }
-                    const token = createToken(tokenData)
+                    const token = await createToken(tokenData)
                     res.status(200).json({
-                        message: `Selamat datang ${user.username}`,
+                        message: `Selamat datang`,
+                        user: loginUser,
                         token
                     })
                 }
@@ -78,6 +81,8 @@ module.exports = {
     getAllUsers: async (req, res) => {
         try {
             let get = await Users.find()
+            .populate({path: 'events', select: 'title'})
+            .populate({path: 'bookings', select: 'id_events status'})
             if(get) {
                 res.send({
                     message: "Get all Data",
@@ -104,7 +109,9 @@ module.exports = {
 
     getOneUser: async(req, res) => {
         try {
-            const oneUser = await Users.findById(req.params.id);
+            const oneUser = await Users.findById(req.params.id)
+            .populate({path: 'events', select: 'title'})
+            .populate({path: 'bookings', select: 'id_events'})
             if(oneUser){
                 res.status(200).json({
                     message: "Get One User",
@@ -127,11 +134,11 @@ module.exports = {
     updateUser: async(req, res) => {
         try {
             const hashedPassword = await bcrypt.hash(req.body.password, 10)
-            const userUpdate = await Users.findByIdAndUpdate({_id: req.params.id}, {email: req.body.email, password:hashedPassword})
+            const userUpdate = await Users.findByIdAndUpdate({_id: req.params.id}, {...req.body, password:hashedPassword})
             if(userUpdate){
                 res.status(200).json({
                     message: "Profile Updated",
-                    userUpdate
+                    
                 })
             } else {
                 res.status(400).json({
