@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt")
 const Users = require('../models/users');
+const { createToken } = require("../helpers/jwt");
 
 module.exports = {
     register: async (req, res) => {
@@ -57,7 +58,7 @@ module.exports = {
                     }
                     const token = createToken(tokenData)
                     res.status(200).json({
-                        message: `Selamat datang ${user.username}`,
+                        message: `Selamat datang ${loginUser.username}`,
                         token
                     })
                 }
