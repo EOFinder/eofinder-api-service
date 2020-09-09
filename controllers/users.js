@@ -29,7 +29,7 @@ module.exports = {
                         res.status(201).send({
                             message: "Register berhasil",
                             status: 200,
-                            checkEmail
+                            
                         })
                     }
                 })

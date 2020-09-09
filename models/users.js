@@ -46,6 +46,10 @@ const usersSchema = new Schema({
     events: [{
         type: Schema.Types.ObjectId,
         ref: 'events',
+    }],
+    histories: [{
+        type: Schema.Types.ObjectId,
+        ref: 'history'
     }]
 }, { timestamps: true })
 

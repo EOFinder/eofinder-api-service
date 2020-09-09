@@ -12,6 +12,7 @@ const port = 4444;
 const usersRouter = require('./routes/users')
 const bookingRouter = require('./routes/booking');
 const eventRouter = require('./routes/events')
+const historyRouter = require('./routes/history')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 app.use('/api', usersRouter)
 app.use('/api', bookingRouter)
 app.use('/api', eventRouter)
+app.use('/api', historyRouter)
 
 db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log(`Currently Connected to ${db._connectionString}`));
