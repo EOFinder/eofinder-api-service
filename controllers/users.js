@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt")
 const Users = require('../models/users');
+const {createToken} = require('../helpers/jwt')
 
 module.exports = {
     register: async (req, res) => {
