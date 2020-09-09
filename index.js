@@ -9,6 +9,7 @@ const port = 4444;
 
 
 // Router
+const usersRouter = require('./routes/users')
 const bookingRouter = require('./routes/booking');
 const eventRouter = require('./routes/events')
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => {
     res.send('welcome to api Event Finder')
 })
+app.use('/api', usersRouter)
 app.use('/api', bookingRouter)
 app.use('/api', eventRouter)
 
