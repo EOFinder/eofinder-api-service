@@ -43,7 +43,6 @@ const usersSchema = new Schema({
     bookings: [{
         type: Schema.Types.ObjectId,
         ref: 'bookings',
-        required: true
     }],
     events: [{
         type: Schema.Types.ObjectId,
