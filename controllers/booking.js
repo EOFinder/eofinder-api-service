@@ -1,6 +1,7 @@
 const Bookings = require('../models/modelBookings');
 const Users = require('../models/users');
 const Events = require('../models/events');
+const History = require('../models/history');
 
 module.exports = {
   getAllBookings : async (req, res) => {
@@ -31,6 +32,7 @@ module.exports = {
       const newBooking = await Bookings.create({
         ...req.body
       })
+      console.log(newBooking);
 
         const userBooks = await Users.findOneAndUpdate(
           {_id: req.body.id_users}, 
@@ -42,6 +44,17 @@ module.exports = {
           {$push: {bookings: newBooking._id}},
           {new: true}
         )
+        const addHistory = await History.create({
+          id_events: req.body.id_events,
+          id_users: req.body.id_users,
+          id_bookings: newBooking._id
+        })
+        const pushHistory = await Users.findOneAndUpdate(
+          {_id: req.body.id_users}, 
+          {$push: {histories: addHistory._id}},
+          {new: true}
+        )
+      
         const checkSeats = await Events.findOne({_id: req.body.id_events})
         let seatsUpdate = await checkSeats.seats;
         const updateSeats = await Events.findOneAndUpdate({_id: req.body.id_events}, {seats: seatsUpdate - 1})
@@ -49,7 +62,6 @@ module.exports = {
       res.status(200).send({
         message: 'success',
         userBooks,
-        eventBooking
       })
     }
     catch(error) {
