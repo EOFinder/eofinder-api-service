@@ -26,7 +26,6 @@ const eventSchema = new Schema({
     },
     image: {
         type: String,
-        required: true
     },
     date: {
         type: Date,
@@ -40,7 +39,11 @@ const eventSchema = new Schema({
     bookings: [{
         type: Schema.Types.ObjectId,
         ref: 'bookings'
-    }]
+    }],
+    status: {
+        type: String,
+        default: "PENDING"
+    }
    
 }, { timestamps: true })
 

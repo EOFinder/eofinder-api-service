@@ -15,6 +15,9 @@ const bookingRouter = require('./routes/booking');
 const eventRouter = require('./routes/events')
 const historyRouter = require('./routes/history')
 
+// admin Router
+const adminRouter = require('./routes/admin')
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
@@ -25,6 +28,8 @@ app.use('/api', usersRouter)
 app.use('/api', bookingRouter)
 app.use('/api', eventRouter)
 app.use('/api', historyRouter)
+
+app.use('/admin', adminRouter)
 
 db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log(`Currently Connected to ${db._connectionString}`));

@@ -5,10 +5,14 @@ const {
     getOneEvent,
     createEvent,
     updateEvent,
-    deleteEvent
+    deleteEvent,
+    getPendingEvents,
+    getAcceptedEvents
 } = require('../controllers/events')
 
 route.get('/events', getAllEvent)
+route.get('/events/pending', getPendingEvents)
+route.get('/events/accepted', getAcceptedEvents)
 route.get('/events/:id', getOneEvent)
 route.post('/events/create', createEvent)
 route.put('/events/update/:id', updateEvent)
