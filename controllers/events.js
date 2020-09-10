@@ -12,6 +12,51 @@ module.exports = {
             res.status(500).send(err)
         }
     },
+    getPendingEvents: async (req, res) => {
+        try {
+            const pendingEvents = await Events.find({status: "PENDING"})
+            if(pendingEvents){
+                res.status(200).json({
+                    message: 'get all pending events',
+                    pendingEvents
+                })
+            } else {
+                res.status(400).json({
+                    message: 'failed to get all pending events'
+                })
+            }
+        }
+        catch(error){
+            console.log(error)
+            res.status(500).json({
+                message: 'internal server error',
+                error
+            })
+        }
+    },
+    getAcceptedEvents: async (req, res) => {
+        try {
+            const acceptedEvents = await Events.find({status: "ACCEPT"})
+            if(acceptedEvents){
+                res.status(200).json({
+                    message: 'get all pending events',
+                    acceptedEvents
+                })
+            } else {
+                res.status(400).json({
+                    message: 'failed to get all pending events'
+                })
+            }
+        }
+        catch(error){
+            console.log(error)
+            res.status(500).json({
+                message: 'internal server error',
+                error
+            })
+        }
+    },
+
     getOneEvent: async (req, res) => {
         try {
             const event = await Events.findById(req.params.id)
