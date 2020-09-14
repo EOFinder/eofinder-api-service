@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
+require('dotenv').config()
 
 const database = 'eventfinder';
-const url= `mongodb+srv://eventfinder:eventfinder@eventfinder.jktgh.mongodb.net/${database}`;
+const url= `${process.env.db}${database}`;
 
 mongoose.connect(url, {
     useNewUrlParser: true,
