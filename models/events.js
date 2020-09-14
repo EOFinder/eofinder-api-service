@@ -6,7 +6,6 @@ const eventSchema = new Schema({
     posted_by: {
         type: Schema.Types.ObjectId,
         ref: 'users',
-        required: true
     },
     title: {
         type: String,

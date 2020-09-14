@@ -81,6 +81,7 @@ module.exports = {
             console.log(userEventUpdate);
             res.status(200).json({ message: 'Event has been created successfully', userEventUpdate })
         } catch (err) {
+            console.log(err);
             res.status(500).send(err)
         }
     },
