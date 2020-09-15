@@ -20,15 +20,21 @@ module.exports = {
                             message: "Invalid data input"
                         })
                     } else {
-                        Users.create({
+                        const userData = {
                             email,
                             password: hashedPassword,
                             fullname,
                             phoneNumber
+                        }
+                        Users.create({
+                          email: userData.email,
+                          password: userData.password,
+                          fullname: userData.fullname,
+                          phoneNumber: userData.phoneNumber
                         })
-                        res.status(201).send({
+                        res.status(200).send({
                             message: "Register berhasil",
-                            status: 200,
+                            userData
                             
                         })
                     }
@@ -50,7 +56,7 @@ module.exports = {
             if(loginUser){
                 const comparePassword = await bcrypt.compare(req.body.password, loginUser.password)
                 if(!comparePassword){
-                    res.status(400).json({
+                    res.status(202).json({
                         message: 'Password salah'
                     })
                 } else {
@@ -67,12 +73,12 @@ module.exports = {
                 }
             } else {
                 res.status(400).json({
-                    message: 'Email / Account tidak ditemukan'
+                    message: res.statusMessage
                 })
+                
             }
         }
         catch(error) {
-            console.log(error)
             res.status(500).json({
                 message: "Internal Server Error"
             })

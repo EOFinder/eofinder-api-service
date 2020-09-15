@@ -114,10 +114,11 @@ module.exports = {
    },
    pendingApproval : async (req, res) => {
        try {
-        const pendingEvents = await Events.findOneAndUpdate({_id: req.params.id}, {...req.body, status: "ACCEPT"})
+        const pendingEvents = await Events.findOneAndUpdate({_id: req.params.id}, {...req.body})
         if(pendingEvents){
             res.status(200).json({
-                message: 'accepted'
+                message: 'accepted',
+                pendingEvents
             })
         } else {
             res.status(400).json({
