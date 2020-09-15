@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 
 const database = 'eventfinder';
-const url= `${process.env.db}${database}`;
+const url= `${process.env.DB}${database}`;
 
 mongoose.connect(url, {
     useNewUrlParser: true,
